@@ -207,8 +207,11 @@ function SlotMachine(container, reels, callback, options) {
   function spinReels() {
     const payLine = [];
 
-    reels.forEach(reel => {
-      const selected = selectRandSymbol(reel.symbols);
+    reels.forEach((reel, i) => {
+      let selected = selectRandSymbol(reel.symbols);
+      if (self.winners) {
+        selected = reel.symbols[self.winners[i]];
+      }
       const startPos = selected.position;
 
       payLine.push(selected);
@@ -317,7 +320,8 @@ function SlotMachine(container, reels, callback, options) {
   /**
    * Protected members.
    */
-  this.play = function() {
+  this.play = function(winners) {
+    self.winners = winners || false;
     dispatch(spinReels);
   };
 }
